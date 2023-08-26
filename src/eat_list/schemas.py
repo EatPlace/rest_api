@@ -36,14 +36,12 @@ class EatListUpdate(EatListBase):
 
 class EatListProductBase(BaseModel):
     price: int
-    eat_list_id: int
     product_id: int
 
     model_config = {
         "json_schema_extra": {
             "example": {
                 "price": 150,
-                "eat_list_id": 1,
                 "product_id": 1,
             }
         }
@@ -52,6 +50,8 @@ class EatListProductBase(BaseModel):
 
 class EatListProductRead(EatListProductBase):
     id: int
+    eat_list_id: int
+
     # currency: CurrencyRead
     # type: ProductTypeRead
     # source: ProductSourceRead

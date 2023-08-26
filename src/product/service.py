@@ -1,7 +1,7 @@
 from sqlalchemy import delete, insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.models import Product
+from src.models import EatListProduct, Product
 from src.product.schemas import ProductCreate, ProductRead
 
 
@@ -28,6 +28,14 @@ async def create_product(db: AsyncSession, product: ProductCreate) -> ProductRea
 
 
 async def delete_product(db: AsyncSession, product_id: int):
+    # Удаляем записи из eat_list_product связанные с удаляемым продуктом
+    delete_eat_list_products_query = delete(EatListProduct).where(
+        EatListProduct.product_id == product_id
+    )
+    await db.execute(delete_eat_list_products_query)
+
+    # Удаляем сам продукт
     delete_product_query = delete(Product).where(Product.id == product_id)
     await db.execute(delete_product_query)
+
     await db.commit()
