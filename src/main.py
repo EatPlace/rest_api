@@ -7,6 +7,7 @@ from src.auth.schemas import UserRead, UserUpdate
 from src.auth.users import current_active_user, fastapi_users
 from src.config import app_configs, settings
 from src.database import User
+from src.product.router import router as product_router
 
 app = FastAPI(**app_configs)
 
@@ -46,3 +47,5 @@ app.include_router(
     prefix="/users",
     tags=["users"],
 )
+
+app.include_router(product_router, prefix="/products", tags=["product"])

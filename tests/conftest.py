@@ -6,15 +6,16 @@ import pytest_asyncio
 from async_asgi_testclient import TestClient
 
 from src.main import app
-from src.database import Base, engine
+from src.models import Base
+from src.database import engine
 
 
-@pytest.fixture(autouse=True, scope="session")
-def run_migrations() -> None:
-    import os
+# @pytest.fixture(autouse=True, scope="session")
+# def run_migrations() -> None:
+#     import os
 
-    print("running migrations..")
-    os.system("alembic upgrade head")
+#     print("running migrations..")
+#     os.system("alembic upgrade head")
 
 
 @pytest.fixture(autouse=True, scope='session')

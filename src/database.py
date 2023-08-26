@@ -30,7 +30,9 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     oauth_accounts: Mapped[List[OAuthAccount]] = relationship(
         "OAuthAccount", lazy="joined"
     )
-    username: Mapped[str] = mapped_column(String(length=320), unique=True, index=True)
+    username: Mapped[str] = mapped_column(
+        String(length=320), unique=True, index=True, nullable=True
+    )
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:

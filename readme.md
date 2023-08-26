@@ -11,7 +11,7 @@ docker compose exec rest_api migrate
 ```
 ## Commands
 ### Migrations
-- Create an automatic migration from changes in `src/database.py`
+- Create an automatic migration from changes in `src/models.py`
 ```shell
 docker compose exec rest_api makemigrations users_added # or other name of the migration
 ```
