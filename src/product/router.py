@@ -1,12 +1,17 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database import get_async_session
-from src.product.schemas import ProductRead
+from src.product.schemas import ProductCreate, ProductRead
 
 router = APIRouter()
 
-from src.product.service import read_product_by_id, read_products
+from src.product.service import (
+    create_product,
+    delete_product,
+    read_product_by_id,
+    read_products,
+)
 
 
 @router.get("", response_model=list[ProductRead])
@@ -28,13 +33,12 @@ async def get_product_by_id(
         raise HTTPException(status_code=404, detail="Product not found")
 
 
-# @router.post("/client", status_code=status.HTTP_201_CREATED, response_model=Client)
-# async def create_new_client(client: ClientCreate):
-#     try:
-#         created_client = await create_client(client)
-#         return created_client
-#     except UniqueViolationError as e:
-#         raise HTTPException(status_code=400, detail=e.message)
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=ProductRead)
+async def create_new_product(
+    product: ProductCreate, db: AsyncSession = Depends(get_async_session)
+):
+    created_product = await create_product(db, product)
+    return created_product
 
 
 # @router.put("/client/{client_id}", response_model=Client)
@@ -46,11 +50,13 @@ async def get_product_by_id(
 #         raise HTTPException(status_code=404, detail="Client not found")
 
 
-# @router.delete("/client/{client_id}")
-# async def delete_existing_client(client_id: int):
-#     exist_client = await read_client_by_id(client_id)
-#     if exist_client:
-#         await delete_client(client_id)
-#         return {"message": "Client deleted successfully"}
-#     else:
-#         raise HTTPException(status_code=404, detail="Client not found")
+@router.delete("/{product_id}")
+async def delete_existing_product(
+    product_id: int, db: AsyncSession = Depends(get_async_session)
+):
+    exist_product = await read_product_by_id(db, product_id)
+    if exist_product:
+        await delete_product(db, product_id)
+        return {"message": "Product deleted successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="Product not found")
