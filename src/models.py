@@ -1,4 +1,5 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from src.database import Base
@@ -72,18 +73,18 @@ class ProductSource(Base):
 #     reason = Column(String)
 
 
-# class EatList(Base):
-#     __tablename__ = "eat_list"
+class EatList(Base):
+    __tablename__ = "eat_list"
 
-#     id = Column(Integer, primary_key=True, index=True)
-#     name = Column(String, nullable=False)
-#     user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("user.id"), nullable=False)
 
 
-# class EatListProduct(Base):
-#     __tablename__ = "eat_list_product"
+class EatListProduct(Base):
+    __tablename__ = "eat_list_product"
 
-#     id = Column(Integer, primary_key=True, index=True)
-#     price = Column(Integer, nullable=False)
-#     eat_list_id = Column(Integer, ForeignKey("eat_list.id"), nullable=False)
-#     product_id = Column(Integer, ForeignKey("product.id"), nullable=False)
+    id = Column(Integer, primary_key=True, index=True)
+    price = Column(Integer, nullable=False)
+    eat_list_id = Column(Integer, ForeignKey("eat_list.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("product.id"), nullable=False)

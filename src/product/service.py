@@ -31,4 +31,3 @@ async def delete_product(db: AsyncSession, product_id: int):
     delete_product_query = delete(Product).where(Product.id == product_id)
     await db.execute(delete_product_query)
     await db.commit()
-

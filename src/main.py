@@ -7,6 +7,7 @@ from src.auth.schemas import UserRead, UserUpdate
 from src.auth.users import current_active_user, fastapi_users
 from src.config import app_configs, settings
 from src.database import User
+from src.eat_list.router import router as eat_list_router
 from src.product.router import router as product_router
 
 app = FastAPI(**app_configs)
@@ -49,3 +50,4 @@ app.include_router(
 )
 
 app.include_router(product_router, prefix="/products", tags=["product"])
+app.include_router(eat_list_router, prefix="/eat_lists", tags=["eat_lists"])
