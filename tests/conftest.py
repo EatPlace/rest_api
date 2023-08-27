@@ -1,13 +1,16 @@
 import asyncio
 from typing import Any, Generator, AsyncGenerator
+from src.main import app
+from async_asgi_testclient import TestClient
+from fastapi import status
 
 import pytest
 import pytest_asyncio
-from async_asgi_testclient import TestClient
+from httpx import AsyncClient
 
 from src.main import app
-from src.models import Base
-from src.database import engine
+from src.models import Base, Currency, ProductSource, ProductType
+from src.database import engine, async_session_maker, get_user_db
 
 
 # @pytest.fixture(autouse=True, scope="session")
@@ -35,9 +38,42 @@ def event_loop() -> Generator[asyncio.AbstractEventLoop, None, None]:
 
 
 @pytest_asyncio.fixture
-async def client() -> AsyncGenerator[TestClient, None]:
-    host, port = "127.0.0.1", "8000"
-    scope = {"client": (host, port)}
-
-    async with TestClient(app, scope=scope) as client:
+async def client() -> AsyncGenerator[AsyncClient, None]:
+    async with AsyncClient(app=app, base_url="http://testserver") as client:
         yield client
+
+
+@pytest.fixture
+async def auth_client(client: TestClient) -> TestClient:
+    # Авторизация пользователя и получение токена
+    json_data = {
+        "username": "email@fake.com",
+        "password": "123456!S",
+    }
+    response = await client.post(
+        "/auth/login",
+        data=json_data,
+    )
+    assert response.status_code == status.HTTP_200_OK
+    resp_json = response.json()
+    assert "access_token" in resp_json
+    assert "token_type" in resp_json
+    token = resp_json["access_token"]
+    
+    # Создание клиента с авторизационным заголовком
+    authenticated_client = TestClient(app, headers={"Authorization": f"Bearer {token}"})
+    return authenticated_client
+
+
+@pytest.fixture(autouse=True, scope="session")
+async def setup_db():
+    async with async_session_maker() as db:
+        # Создание и добавление объектов в базу данных
+        currency = Currency(quote="RUB")
+        product_source = ProductSource(name="Yandex lavka", link="http://yandex-lavka.com")
+        product_type = ProductType(name="Delicious")
+        
+        db.add_all([currency, product_source, product_type])
+
+        await db.commit()
+    

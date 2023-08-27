@@ -24,8 +24,14 @@ async def read_eat_list_by_id(db: AsyncSession, list_id: int) -> EatListRead:
     return result.scalars().first()
 
 
-async def create_eat_list(db: AsyncSession, eat_list: EatListCreate) -> EatListRead:
-    insert_query = insert(EatList).values(**eat_list.model_dump()).returning(EatList)
+async def create_eat_list(
+    db: AsyncSession, eat_list: EatListCreate, user_id: int
+) -> EatListRead:
+    insert_query = (
+        insert(EatList)
+        .values(**eat_list.model_dump(), user_id=user_id)
+        .returning(EatList)
+    )
 
     eat_list = await db.execute(insert_query)
     await db.commit()

@@ -26,7 +26,7 @@ async def test_register(client: TestClient) -> None:
     assert resp_json == json_data
 
 
-async def test_register_email_taken(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_register_email_taken(client: TestClient) -> None:
     json_data = {
         "email": "email@fake.com",
         "password": "123456!S",
@@ -44,3 +44,8 @@ async def test_register_email_taken(client: TestClient, monkeypatch: pytest.Monk
     resp_json = resp.json()
 
     assert resp.status_code == status.HTTP_400_BAD_REQUEST
+
+
+async def test_protected_route(auth_client: TestClient) -> None:
+    response = await auth_client.get("/authenticated-route")
+    assert response.status_code == status.HTTP_200_OK
