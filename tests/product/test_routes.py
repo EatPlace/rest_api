@@ -13,10 +13,14 @@ async def test_get_not_exist_product_by_id(client: TestClient) -> None:
     assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 
-async def test_delete_not_exist_product_by_id(client: TestClient) -> None:
+async def test_delete_not_exist_product_not_auth(client: TestClient) -> None:
     resp = await client.delete("/products/1")
-    assert resp.status_code == status.HTTP_404_NOT_FOUND
+    assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
+
+async def test_delete_not_exist_product(auth_client: TestClient) -> None:
+    resp = await auth_client.delete("/products/1")
+    assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 async def test_create_product(client: TestClient, setup_db) -> None:
     json_data = {
@@ -50,7 +54,10 @@ async def test_get_exist_product_by_id(client: TestClient) -> None:
     assert resp.status_code == status.HTTP_200_OK
 
 
-async def test_delete_exist_product_by_id(client: TestClient) -> None:
+async def test_delete_exist_product_not_auth(client: TestClient) -> None:
     resp = await client.delete("/products/1")
-    assert resp.status_code == status.HTTP_200_OK
+    assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
+async def test_delete_exist_product_by_id(auth_client: TestClient) -> None:
+    resp = await auth_client.delete("/products/1")
+    assert resp.status_code == status.HTTP_200_OK

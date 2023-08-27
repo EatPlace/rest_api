@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database import get_async_session
+from src.auth.users import current_active_user
+from src.database import User, get_async_session
 from src.product.schemas import ProductCreate, ProductRead
 
 router = APIRouter()
@@ -52,7 +53,9 @@ async def create_new_product(
 
 @router.delete("/{product_id}")
 async def delete_existing_product(
-    product_id: int, db: AsyncSession = Depends(get_async_session)
+    product_id: int,
+    db: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_active_user),
 ):
     exist_product = await read_product_by_id(db, product_id)
     if exist_product:
