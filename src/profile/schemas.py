@@ -1,14 +1,14 @@
-import uuid
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 
 
-class EatList(BaseModel):
+class ProfileEatList(BaseModel):
     id: int
     name: str
-    price_per_month: int
-    currency: str
+    total_price_per_month: Optional[int]
+    currency: Optional[str]
+    available: Optional[bool]
 
     calories_per_month: Optional[int]
     total_fat_per_month: Optional[int]
@@ -18,12 +18,11 @@ class EatList(BaseModel):
     calcium_per_month: Optional[int]
     iron_per_month: Optional[int]
     potassium_per_month: Optional[int]
-    available: Optional[bool]
 
 
 class ProfileRead(BaseModel):
     username: str
-    lists: EatList
+    lists: list[ProfileEatList]
 
     model_config = {
         "json_schema_extra": {
@@ -42,8 +41,7 @@ class ProfileRead(BaseModel):
                     "calcium_per_month": 70,
                     "potassium_per_month": 5,
                     "available": True,
-                }    
+                },
             }
         }
     }
-

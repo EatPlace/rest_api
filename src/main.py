@@ -9,6 +9,7 @@ from src.config import app_configs, settings
 from src.database import User
 from src.eat_list.router import router as eat_list_router
 from src.product.router import router as product_router
+from src.profile.router import router as profile_router
 from src.user_product.router import router as user_product_router
 
 app = FastAPI(**app_configs)
@@ -53,3 +54,4 @@ app.include_router(
 app.include_router(product_router, prefix="/products", tags=["product"])
 app.include_router(eat_list_router, prefix="/eat_lists", tags=["eat_lists"])
 app.include_router(user_product_router, prefix="/user_products", tags=["user_products"])
+app.include_router(profile_router, prefix="/profile", tags=["profile"])
