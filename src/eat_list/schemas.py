@@ -35,12 +35,14 @@ class EatListUpdate(EatListBase):
 
 class EatListProductBase(BaseModel):
     price: int
+    count: int
     product_id: int
 
     model_config = {
         "json_schema_extra": {
             "example": {
                 "price": 150,
+                "count": 1,
                 "product_id": 1,
             }
         }

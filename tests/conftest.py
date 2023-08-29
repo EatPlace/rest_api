@@ -69,11 +69,28 @@ async def auth_client(client: TestClient) -> TestClient:
 async def setup_db():
     async with async_session_maker() as db:
         # Создание и добавление объектов в базу данных
-        currency = Currency(id=1, quote="RUB")
-        product_source = ProductSource(id=1, name="Yandex lavka", link="http://yandex-lavka.com")
-        product_type = ProductType(id=1, name="Delicious")
+        currency = Currency(quote="RUB")
+        product_source = ProductSource(name="Yandex lavka", link="http://yandex-lavka.com")
+        product_type = ProductType(name="Delicious")
+        product = Product(
+            available= True,
+            calcium = 20,
+            calories = 150,
+            currency_id = 1,
+            iron = 1,
+            link = "https://lavka.yandex.ru/213/good/marmelad-dolki-limonnye-marmelandiya-udarnica-250-gram",
+            name = "Мармелад Дольки лимонные Мармеландия «Ударница»",
+            potassium = 100,
+            price = 100,
+            source_id = 1,
+            total_carb = 25,
+            total_fat = 5,
+            total_protein = 1,
+            type_id = 1,
+            vitamin_d = 2,
+            weight = 250
+        )
         
-        db.add_all([currency, product_source, product_type])
+        db.add_all([currency, product_source, product_type, product])
 
         await db.commit()
-    

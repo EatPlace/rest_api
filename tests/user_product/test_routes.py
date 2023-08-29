@@ -33,7 +33,7 @@ async def test_delete_not_exist_product(auth_client: TestClient) -> None:
     assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 
-async def test_create_user_product_not_auth(client: TestClient, add_product_db) -> None:
+async def test_create_user_product_not_auth(client: TestClient) -> None:
     json_data = {
         "like": True,
         "product_id": 1,
@@ -46,7 +46,7 @@ async def test_create_user_product_not_auth(client: TestClient, add_product_db) 
     assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-async def test_create_user_product(auth_client: TestClient, add_product_db) -> None:
+async def test_create_user_product(auth_client: TestClient) -> None:
     json_data = {
         "like": True,
         "product_id": 1,

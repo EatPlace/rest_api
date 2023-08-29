@@ -2,6 +2,7 @@ import pytest
 from async_asgi_testclient import TestClient
 from fastapi import status
 
+PRODUCT_ID = 2
 
 async def test_get_products(client: TestClient) -> None:
     resp = await client.get("/products")
@@ -9,18 +10,19 @@ async def test_get_products(client: TestClient) -> None:
 
 
 async def test_get_not_exist_product_by_id(client: TestClient) -> None:
-    resp = await client.get("/products/1")
+    resp = await client.get(f"/products/{PRODUCT_ID}")
     assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 
 async def test_delete_not_exist_product_not_auth(client: TestClient) -> None:
-    resp = await client.delete("/products/1")
+    resp = await client.delete(f"/products/{PRODUCT_ID}")
     assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 async def test_delete_not_exist_product(auth_client: TestClient) -> None:
-    resp = await auth_client.delete("/products/1")
+    resp = await auth_client.delete(f"/products/{PRODUCT_ID}")
     assert resp.status_code == status.HTTP_404_NOT_FOUND
+
 
 async def test_create_product(client: TestClient) -> None:
     json_data = {
@@ -50,14 +52,15 @@ async def test_create_product(client: TestClient) -> None:
 
 
 async def test_get_exist_product_by_id(client: TestClient) -> None:
-    resp = await client.get("/products/1")
+    resp = await client.get(f"/products/{PRODUCT_ID}")
     assert resp.status_code == status.HTTP_200_OK
 
 
 async def test_delete_exist_product_not_auth(client: TestClient) -> None:
-    resp = await client.delete("/products/1")
+    resp = await client.delete(f"/products/{PRODUCT_ID}")
     assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
+
 async def test_delete_exist_product_by_id(auth_client: TestClient) -> None:
-    resp = await auth_client.delete("/products/1")
+    resp = await auth_client.delete(f"/products/{PRODUCT_ID}")
     assert resp.status_code == status.HTTP_200_OK

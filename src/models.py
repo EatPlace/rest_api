@@ -86,5 +86,6 @@ class EatListProduct(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     price = Column(Integer, nullable=False)
+    count = Column(Integer, nullable=False, default=1)
     eat_list_id = Column(Integer, ForeignKey("eat_list.id"), nullable=False)
     product_id = Column(Integer, ForeignKey("product.id"), nullable=False)
