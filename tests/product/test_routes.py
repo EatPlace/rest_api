@@ -22,7 +22,7 @@ async def test_delete_not_exist_product(auth_client: TestClient) -> None:
     resp = await auth_client.delete("/products/1")
     assert resp.status_code == status.HTTP_404_NOT_FOUND
 
-async def test_create_product(client: TestClient, setup_db) -> None:
+async def test_create_product(client: TestClient) -> None:
     json_data = {
         "available": True,
         "calcium": 20,

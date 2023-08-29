@@ -9,7 +9,7 @@ import pytest_asyncio
 from httpx import AsyncClient
 
 from src.main import app
-from src.models import Base, Currency, ProductSource, ProductType
+from src.models import Base, Currency, ProductSource, ProductType, Product
 from src.database import engine, async_session_maker, get_user_db
 
 
@@ -69,9 +69,9 @@ async def auth_client(client: TestClient) -> TestClient:
 async def setup_db():
     async with async_session_maker() as db:
         # Создание и добавление объектов в базу данных
-        currency = Currency(quote="RUB")
-        product_source = ProductSource(name="Yandex lavka", link="http://yandex-lavka.com")
-        product_type = ProductType(name="Delicious")
+        currency = Currency(id=1, quote="RUB")
+        product_source = ProductSource(id=1, name="Yandex lavka", link="http://yandex-lavka.com")
+        product_type = ProductType(id=1, name="Delicious")
         
         db.add_all([currency, product_source, product_type])
 
