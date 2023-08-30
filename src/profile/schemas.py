@@ -43,14 +43,26 @@ class ProfileEatList(BaseModel):
     potassium_per_month: Optional[int]
 
 
+class ProfileInfo(BaseModel):
+    weight: Optional[float]
+    age: Optional[int]
+    activity: Optional[float]
+
+
 class ProfileRead(BaseModel):
     username: str
+    info: Optional[ProfileInfo]
     lists: list[ProfileEatList]
 
     model_config = {
         "json_schema_extra": {
             "example": {
                 "username": "alexander",
+                "info": {
+                    "age": 20,
+                    "weight": 76,
+                    "activity": 1.44,
+                },
                 "lists": {
                     "id": 1,
                     "name": "Economy set",

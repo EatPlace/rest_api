@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -93,3 +93,15 @@ class EatListProduct(Base):
     product_id = Column(Integer, ForeignKey("product.id"), nullable=False)
 
     product = relationship("Product", back_populates="eat_list_products")
+
+
+class UserInfo(Base):
+    __tablename__ = "user_info"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("user.id"), unique=True, nullable=False
+    )
+    weight = Column(Float)
+    age = Column(Integer)
+    activity = Column(Float)

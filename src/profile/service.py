@@ -1,8 +1,15 @@
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.models import Currency, EatList, EatListProduct, Product
-from src.profile.schemas import ProfileEatList, ProfileProduct
+from src.models import Currency, EatList, EatListProduct, Product, UserInfo
+from src.profile.schemas import ProfileEatList, ProfileInfo, ProfileProduct
+
+
+async def read_profile_info(db: AsyncSession, user_id: int) -> ProfileInfo:
+    query = select(UserInfo).where(UserInfo.user_id == user_id)
+    result = await db.scalar(query)
+    # user_info = result.scalars().all()
+    return result
 
 
 async def read_profile_lists(db: AsyncSession, user_id: int) -> list[ProfileEatList]:

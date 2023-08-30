@@ -10,7 +10,11 @@ router = APIRouter()
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.eat_list.service import read_eat_list_by_id
-from src.profile.service import read_profile_list_products, read_profile_lists
+from src.profile.service import (
+    read_profile_info,
+    read_profile_list_products,
+    read_profile_lists,
+)
 
 
 @router.get("", response_model=ProfileRead)
@@ -19,7 +23,8 @@ async def get_profile(
     user: User = Depends(current_active_user),
 ):
     user_lists = await read_profile_lists(db, user_id=user.id)
-    return {"username": user.username, "lists": user_lists}
+    info = await read_profile_info(db, user_id=user.id)
+    return {"username": user.username, "info": info, "lists": user_lists}
 
 
 @router.get("{list_id}", response_model=ProfileProductList)
