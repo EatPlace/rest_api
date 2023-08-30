@@ -8,7 +8,6 @@ from src.profile.schemas import ProfileEatList, ProfileInfo, ProfileProduct
 async def read_profile_info(db: AsyncSession, user_id: int) -> ProfileInfo:
     query = select(UserInfo).where(UserInfo.user_id == user_id)
     result = await db.scalar(query)
-    # user_info = result.scalars().all()
     return result
 
 
@@ -18,10 +17,6 @@ async def read_profile_lists(db: AsyncSession, user_id: int) -> list[ProfileEatL
     eat_lists = result.scalars().all()
 
     for eat_list in eat_lists:
-        print("\n\n\n\n\n")
-        print(eat_list)
-        print("\n\n\n\n\n")
-
         eat_list_query = select(
             func.sum(EatListProduct.price * EatListProduct.count)
         ).where(EatListProduct.eat_list_id == eat_list.id)

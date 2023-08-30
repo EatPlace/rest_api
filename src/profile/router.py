@@ -27,7 +27,7 @@ async def get_profile(
     return {"username": user.username, "info": info, "lists": user_lists}
 
 
-@router.get("{list_id}", response_model=ProfileProductList)
+@router.get("/{list_id}", response_model=ProfileProductList)
 async def get_profile_eat_list(
     list_id: int,
     db: AsyncSession = Depends(get_async_session),
