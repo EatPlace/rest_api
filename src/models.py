@@ -32,6 +32,8 @@ class Product(Base):
     type_ = relationship("ProductType", back_populates="products")
     source = relationship("ProductSource", back_populates="products")
 
+    eat_list_products = relationship("EatListProduct", back_populates="product")
+
 
 class Currency(Base):
     __tablename__ = "currency"
@@ -89,3 +91,5 @@ class EatListProduct(Base):
     count = Column(Integer, nullable=False, default=1)
     eat_list_id = Column(Integer, ForeignKey("eat_list.id"), nullable=False)
     product_id = Column(Integer, ForeignKey("product.id"), nullable=False)
+
+    product = relationship("Product", back_populates="eat_list_products")

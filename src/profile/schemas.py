@@ -3,6 +3,29 @@ from typing import Optional
 from pydantic import BaseModel
 
 
+class ProfileProduct(BaseModel):
+    id: int
+    name: str
+    price: int
+    count: int
+    currency: Optional[str]
+    available: Optional[bool]
+
+    calories_per_month: Optional[int]
+    total_fat_per_month: Optional[int]
+    total_carb_per_month: Optional[int]
+    total_protein_per_month: Optional[int]
+    vitamin_d_per_month: Optional[int]
+    calcium_per_month: Optional[int]
+    iron_per_month: Optional[int]
+    potassium_per_month: Optional[int]
+
+
+class ProfileProductList(BaseModel):
+    name: str
+    products: list[ProfileProduct]
+
+
 class ProfileEatList(BaseModel):
     id: int
     name: str
