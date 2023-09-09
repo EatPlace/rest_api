@@ -24,7 +24,6 @@ from src.database import User, get_user_db
 from src.redis import redis_client
 
 SECRET = auth_config.JWT_SECRET
-STRONG_PASSWORD_PATTERN = re.compile(r"^(?=.*[\d])(?=.*[!@#$%^&*])[\w!@#$%^&*]{6,128}$")
 
 
 google_oauth_client = GoogleOAuth2(
@@ -43,17 +42,6 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         password: str,
         user: Union[UserCreate, User],
     ) -> None:
-        if len(password) < 8:
-            raise InvalidPasswordException(
-                reason="Password should be at least 8 characters"
-            )
-        if user.email in password:
-            raise InvalidPasswordException(reason="Password should not contain e-mail")
-        if not re.match(STRONG_PASSWORD_PATTERN, password):
-            raise InvalidPasswordException(
-                reason="Password must contain at least one lower character, one upper character, digit or special symbol"
-            )
-
         await self.validate_username(user.username)
 
     async def validate_username(self, username: str):
