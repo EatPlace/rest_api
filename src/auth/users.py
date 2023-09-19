@@ -1,15 +1,8 @@
-import re
 import uuid
 from typing import Optional, Union
 
 from fastapi import Depends, Request
-from fastapi_users import (
-    BaseUserManager,
-    FastAPIUsers,
-    InvalidPasswordException,
-    UUIDIDMixin,
-    exceptions,
-)
+from fastapi_users import BaseUserManager, FastAPIUsers, UUIDIDMixin, exceptions
 from fastapi_users.authentication import (
     AuthenticationBackend,
     BearerTransport,

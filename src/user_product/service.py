@@ -8,7 +8,7 @@ from src.user_product.schemas import UserProductCreate, UserProductRead
 
 
 async def read_user_products(
-    db: AsyncSession, user_id: int, skip: int = 0, limit: int = 100
+    db: AsyncSession, user_id: int, liked: bool = None, skip: int = 0, limit: int = 100
 ) -> list[UserProductRead]:
     query = (
         select(UserProduct)
@@ -16,6 +16,11 @@ async def read_user_products(
         .offset(skip)
         .limit(limit)
     )
+
+    # Добавляем фильтрацию по полю 'like', если задано значение liked
+    if liked is not None:
+        query = query.where(UserProduct.like == liked)
+
     result = await db.execute(query)
     return result.scalars().all()
 
