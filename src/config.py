@@ -42,7 +42,7 @@ settings = Config()
 
 app_configs: dict[str, Any] = {"title": "Auth API"}
 if settings.ENVIRONMENT.is_deployed:
-    app_configs["root_path"] = f"/v{settings.APP_VERSION}"
+    app_configs["root_path"] = f"api/v{settings.APP_VERSION}"
 
 if not settings.ENVIRONMENT.is_debug:
     app_configs["openapi_url"] = None  # hide docs

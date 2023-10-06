@@ -1,9 +1,9 @@
 version: '3.7'
 
 services:
-  auth_api:
-    container_name: auth_api
-    image: auth_api
+  rest_api:
+    container_name: rest_api
+    image: rest_api
     env_file:
       - .env
     build:
@@ -23,11 +23,11 @@ services:
     image: library/postgres:14.1
 
     environment:
-      - POSTGRES_USER=auth
-      - POSTGRES_PASSWORD=auth
-      - POSTGRES_DB=auth
+      - POSTGRES_USER=rest
+      - POSTGRES_PASSWORD=rest
+      - POSTGRES_DB=rest
     volumes:
-      - app_pg_data:/var/lib/postgresql/data
+      - eat_place_pg_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
@@ -48,4 +48,4 @@ volumes:
 networks:
   default:
     external: true
-    name: auth_main
+    name: eat_place
